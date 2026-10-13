@@ -7,7 +7,9 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/index.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'login_model.dart';
 export 'login_model.dart';
 
@@ -31,6 +33,12 @@ class _LoginWidgetState extends State<LoginWidget>
   void initState() {
     super.initState();
     _model = createModel(context, () => LoginModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      FFAppState().shownquote = false;
+      safeSetState(() {});
+    });
 
     _model.tabBarController = TabController(
       vsync: this,
@@ -65,6 +73,8 @@ class _LoginWidgetState extends State<LoginWidget>
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -1029,6 +1039,8 @@ class _LoginWidgetState extends State<LoginWidget>
                                   !_model.formKey1.currentState!.validate()) {
                                 return;
                               }
+                              FFAppState().shownquote = false;
+                              safeSetState(() {});
 
                               context.goNamedAuth(
                                   TasksWidget.routeName, context.mounted);
@@ -1155,13 +1167,6 @@ class _LoginWidgetState extends State<LoginWidget>
                             ),
                           ),
                       ],
-                    ),
-                    Container(
-                      width: 100.0,
-                      height: 100.0,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                      ),
                     ),
                   ],
                 ),
